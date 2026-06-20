@@ -7,6 +7,9 @@ RUN npm ci --omit=dev
 
 COPY . .
 
+COPY docker-entrypoint.sh /docker-entrypoint.sh
+RUN chmod +x /docker-entrypoint.sh
+
 EXPOSE 4000
 
-CMD ["node", "index.js"]
+ENTRYPOINT ["/docker-entrypoint.sh"]
