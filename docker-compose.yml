@@ -3,10 +3,10 @@ services:
     build: .
     restart: unless-stopped
     ports:
-      - '4000:4000'
+      - '4007:4007'
     environment:
       NODE_ENV: ${NODE_ENV:-production}
-      PORT: 4000
+      PORT: 4007
       DB_HOST: ${DB_HOST:-host.docker.internal}
       DB_PORT: ${DB_PORT:-3306}
       DB_NAME: ${DB_NAME:-formflow}
