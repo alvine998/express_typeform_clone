@@ -1,0 +1,18 @@
+services:
+  app:
+    build: .
+    restart: unless-stopped
+    ports:
+      - '4000:4000'
+    environment:
+      NODE_ENV: ${NODE_ENV:-production}
+      PORT: 4000
+      DB_HOST: ${DB_HOST:-host.docker.internal}
+      DB_PORT: ${DB_PORT:-3306}
+      DB_NAME: ${DB_NAME:-formflow}
+      DB_USER: ${DB_USER:-formflow}
+      DB_PASSWORD: ${DB_PASSWORD:-formflow}
+      JWT_SECRET: ${JWT_SECRET:-change-me-in-production}
+      CORS_ORIGIN: ${CORS_ORIGIN:-*}
+    extra_hosts:
+      - 'host.docker.internal:host-gateway'
