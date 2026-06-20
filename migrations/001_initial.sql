@@ -90,9 +90,15 @@ CREATE TABLE IF NOT EXISTS notifications (
   FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
 );
 
+DROP INDEX IF EXISTS idx_forms_created_by ON forms;
 CREATE INDEX idx_forms_created_by ON forms(created_by);
+DROP INDEX IF EXISTS idx_form_fields_form_id ON form_fields;
 CREATE INDEX idx_form_fields_form_id ON form_fields(form_id);
+DROP INDEX IF EXISTS idx_form_responses_form_id ON form_responses;
 CREATE INDEX idx_form_responses_form_id ON form_responses(form_id);
+DROP INDEX IF EXISTS idx_activity_logs_user_id ON activity_logs;
 CREATE INDEX idx_activity_logs_user_id ON activity_logs(user_id);
+DROP INDEX IF EXISTS idx_finance_records_form_id ON finance_records;
 CREATE INDEX idx_finance_records_form_id ON finance_records(form_id);
+DROP INDEX IF EXISTS idx_notifications_user_id ON notifications;
 CREATE INDEX idx_notifications_user_id ON notifications(user_id);
