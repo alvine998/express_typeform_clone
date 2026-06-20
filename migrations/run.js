@@ -4,6 +4,26 @@ const mysql = require('mysql2/promise');
 const fs = require('fs');
 const path = require('path');
 
+async function runStatements(connection, sql) {
+  const statements = sql
+    .split(';')
+    .map((s) => s.trim())
+    .filter((s) => s.length > 0);
+
+  for (const stmt of statements) {
+    try {
+      await connection.query(stmt);
+      console.log('  OK:', stmt.substring(0, 60).replace(/\n/g, ' ') + (stmt.length > 60 ? '...' : ''));
+    } catch (err) {
+      if (err.code === 'ER_DUP_KEYNAME' || err.code === 'ER_DUP_KEY') {
+        console.log('  SKIP (already exists):', stmt.substring(0, 60).replace(/\n/g, ' ') + '...');
+      } else {
+        throw err;
+      }
+    }
+  }
+}
+
 async function migrate() {
   const connection = await mysql.createConnection({
     host: process.env.DB_HOST,
@@ -18,7 +38,7 @@ async function migrate() {
 
   await connection.query(`CREATE DATABASE IF NOT EXISTS \`${process.env.DB_NAME}\``);
   await connection.query(`USE \`${process.env.DB_NAME}\``);
-  await connection.query(sql);
+  await runStatements(connection, sql);
 
   console.log(`Migration ${sqlFile} executed successfully`);
   await connection.end();
